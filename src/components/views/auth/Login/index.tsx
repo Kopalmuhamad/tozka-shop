@@ -2,9 +2,11 @@ import React, { FormEvent, useState } from 'react'
 import styles from "./Login.module.scss"
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 const LoginView = () => {
+    const { data } = useSession()
+    console.log(data)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -54,6 +56,7 @@ const LoginView = () => {
                     </div>
                     <button type="submit" className={styles.login__form__button}>{loading ? 'Loading...' : 'Login'}</button>
                 </form>
+                <button type="button" onClick={() => signIn('google', { callbackUrl, redirect: false })} className={styles.login__form__button_secondary}>{loading ? 'Loading...' : 'Login With Google'}</button>
             </div>
             <p className={styles.login__link}>Don{"'"}t Have an account?<Link href={'/auth/register'}>Sign Up here</Link></p>
         </div>
