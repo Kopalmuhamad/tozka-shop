@@ -8,7 +8,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import bcrypt from "bcrypt";
 import app from "./init";
 
 const firestore = getFirestore(app);
@@ -21,74 +20,28 @@ export async function retrieveData(collectionName: string) {
 
 export async function retrieveDataById(collectionName: string, id: string) {
   const snapshot = await getDoc(doc(firestore, collectionName, id));
-  const data = snapshot.data;
+  const data = snapshot.data();
   return data;
 }
 
-export async function signUp(userData: {
-  email: string;
-  fullname: string;
-  password: string;
-  phone: string;
-  role?: string;
-}): Promise<boolean> {
-  try {
-    const q = query(
-      collection(firestore, "users"),
-      where("email", "==", userData.email)
-    );
-    const snapshot = await getDocs(q);
-    const existingUsers = snapshot.docs.map((doc) => doc.data());
-
-    if (existingUsers.length > 0) {
-      return false; // User already exists
-    }
-
-    if (!userData.role) {
-      userData.role = "member";
-    }
-
-    userData.password = await bcrypt.hash(userData.password, 10);
-    await addDoc(collection(firestore, "users"), userData);
-
-    return true;
-  } catch (error) {
-    console.error("Error in signUp:", error);
-    return false;
-  }
-}
-
-export async function signIn(email: string, password: string) {
-  try {
-    const q = query(
-      collection(firestore, "users"),
-      where("email", "==", email)
-    );
-    const snapshot = await getDocs(q);
-    const data = snapshot.docs.map((doc) => doc.data());
-
-    if (data) return data[0];
-    else return null;
-  } catch (error) {
-    console.error("Error in signIn:", error);
-    return null;
-  }
-}
-
-export async function loginWithGoogle(data: any, callback: Function) {
+export async function retrieveDataByField(
+  collectionName: string,
+  field: string,
+  value: string
+) {
   const q = query(
-    collection(firestore, "users"),
-    where("email", "==", data.email)
+    collection(firestore, collectionName),
+    where(field, "==", value)
   );
   const snapshot = await getDocs(q);
-  const user = snapshot.docs.map((doc) => doc.data());
+  const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return data;
+}
 
-  if (user.length > 0) {
-    callback(user[0]);
-  } else {
-    data.role = "member";
-    await addDoc(collection(firestore, "users"), data).then(() => {
-      callback(data);
-    });
+export async function addUser(collectionName: string, userData: any) {
+  try {
+    await addDoc(collection(firestore, collectionName), userData);
+  } catch (error) {
+    console.error("Error in addUser:", error);
   }
 }

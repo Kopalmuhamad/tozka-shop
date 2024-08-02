@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react'
 import styles from "./Register.module.scss"
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Input from '@/components/ui/Input'
 
 const RegisterView = () => {
     const [loading, setLoading] = useState(false)
@@ -42,27 +43,15 @@ const RegisterView = () => {
             {error && <p className={styles.register__error}>{error}</p>}
             <div className={styles.register__form}>
                 <form action="" onSubmit={handleSubmit}>
-                    <div className={styles.register__form__item}>
-                        <label htmlFor="fullname">Fullname</label>
-                        <input type="text" name='fullname' className={styles.register__form__item__input} />
-                    </div>
-                    <div className={styles.register__form__item}>
-                        <label htmlFor="phone">Phone Number</label>
-                        <input type="text" name='phone' className={styles.register__form__item__input} />
-                    </div>
-                    <div className={styles.register__form__item}>
-                        <label htmlFor="email">Email</label>
-                        <input type="email" name='email' className={styles.register__form__item__input} />
-                    </div>
-                    <div className={styles.register__form__item}>
-                        <label htmlFor="password">Password</label>
-                        <input type="password" name='password' className={styles.register__form__item__input} />
-                    </div>
+                    <Input id="fullname" htmlFor='fullname' label="Full Name" name="fullname" type="text" placeholder="Enter your full name" />
+                    <Input id="phone" htmlFor='phone' label="Phone Number" name="phone" type="text" placeholder="Enter your phone number" />
+                    <Input id="email" htmlFor='email' label="Email" name="email" type="text" placeholder="Enter your email" />
+                    <Input id="password" htmlFor='password' label="Password" name="password" type="password" placeholder="Enter your password" />
                     <button type="submit" className={styles.register__form__button}>{loading ? 'Loading...' : 'Register'}</button>
                 </form>
-            </div>
+            </div >
             <p className={styles.register__link}>Have an account?<Link href={'/auth/login'}>Sign in here</Link></p>
-        </div>
+        </div >
     )
 }
 

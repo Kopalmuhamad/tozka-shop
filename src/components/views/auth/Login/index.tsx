@@ -3,6 +3,8 @@ import styles from "./Login.module.scss"
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { signIn, useSession } from 'next-auth/react'
+import Input from '@/components/ui/Input'
+import Button from '@/components/Button'
 
 const LoginView = () => {
     const { data } = useSession()
@@ -46,17 +48,11 @@ const LoginView = () => {
             {error && <p className={styles.login__error}>{error}</p>}
             <div className={styles.login__form}>
                 <form action="" onSubmit={handleSubmit}>
-                    <div className={styles.login__form__item}>
-                        <label htmlFor="email">Email</label>
-                        <input type="email" name='email' className={styles.login__form__item__input} />
-                    </div>
-                    <div className={styles.login__form__item}>
-                        <label htmlFor="password">Password</label>
-                        <input type="password" name='password' className={styles.login__form__item__input} />
-                    </div>
-                    <button type="submit" className={styles.login__form__button}>{loading ? 'Loading...' : 'Login'}</button>
+                    <Input id="email" label="Email" name="email" type="email" htmlFor="email" placeholder='Email' />
+                    <Input id="password" label="Password" name="password" type="password" htmlFor="password" placeholder='Password' />
+                    <Button type="submit">{loading ? 'Loading...' : 'Login'}</Button>
                 </form>
-                <button type="button" onClick={() => signIn('google', { callbackUrl, redirect: false })} className={styles.login__form__button_secondary}>{loading ? 'Loading...' : 'Login With Google'}</button>
+                <Button variant='secondary' type="button" onClick={() => signIn('google', { callbackUrl, redirect: false })}>{loading ? 'Loading...' : 'Login With Google'}</Button>
             </div>
             <p className={styles.login__link}>Don{"'"}t Have an account?<Link href={'/auth/register'}>Sign Up here</Link></p>
         </div>
