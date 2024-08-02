@@ -20,7 +20,7 @@ const RegisterView = () => {
             phone: form.phone.value,
             password: form.password.value
         }
-        const result = await fetch('http://localhost:3000/api/user/register', {
+        const result = await fetch('/api/user/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
