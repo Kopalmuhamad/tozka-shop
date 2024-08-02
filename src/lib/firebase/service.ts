@@ -57,3 +57,20 @@ export async function signUp(userData: {
     return false;
   }
 }
+
+export async function signIn(email: string, password: string) {
+  try {
+    const q = query(
+      collection(firestore, "users"),
+      where("email", "==", email)
+    );
+    const snapshot = await getDocs(q);
+    const data = snapshot.docs.map((doc) => doc.data());
+
+    if (data) return data[0];
+    else return null;
+  } catch (error) {
+    console.error("Error in signIn:", error);
+    return null;
+  }
+}
